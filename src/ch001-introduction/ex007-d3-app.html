@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>처음 만들어보는 D3 앱</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+    <body>
+        <h1>간단한 D3 앱</h1>
+        <script>
+            d3.select('body')
+                .append('div')
+                .style('border', '1px solid black')
+                .html('Hello D3!')
+
+            setTimeout(() => {
+                d3.select('div')
+                    .html('Click me!')
+                    .style('background-color', 'pink')
+                    .style('font-size', '24px')
+                    .attr('id', 'newDiv')
+                    .attr('class', 'd3div')
+                    .on('click', (e) => {
+                        // on을 통한 event listener 추가
+                        e.currentTarget.style.backgroundColor = 'red'
+                        // d3.select(this)
+                    })
+            }, 2000)
+        </script>
+    </body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>간단한 bar chart</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            svg {
+                position: absolute;
+                width: 500px;
+                height: 500px;
+                border: 1px lightgray solid;
+            }
+        </style>
+    </head>
+    <h1>간단한 bar chart</h1>
+    <svg></svg>
+    <body>
+        <script>
+            d3.select('svg')
+                .selectAll('rect')
+                .data([15, 50, 22, 8, 100, 10])
+                .enter()
+                .append('rect')
+                .attr('width', 10) // 사각형의 너비를 고정된 값으로 설정
+                .attr('height', function (d) {
+                    return d
+                }) // 높이를 각 요소에 연결된 데이터값과 동일하게 설정
+                .style('fill', 'blue')
+                .style('stroke', 'red')
+                .style('stroke-width', '1px')
+                .style('opacity', 0.25)
+                .attr('x', (d, i) => i * 10) // x 값이 없으므로 그래프가 하나로 겹쳐져 나오므로 x값 변경
+                .attr('y', (d, i) => 100 - d) // 위에서 아래로 내려오는 그래프를 아래에서 위로 올라가는 것처럼 보이게 하기 위한 처리. 최대 높이가 100이므로 y (시작)위치를 꼭대기에서의 거리 (100 - d)로 변경
+        </script>
+    </body>
+</html>

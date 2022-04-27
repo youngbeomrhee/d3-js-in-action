@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>간단한 bar chart</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            svg {
+                width: 200px;
+                height: 200px;
+                border: 1px lightgray solid;
+            }
+        </style>
+    </head>
+    <h2>Data의 각 값의 편차가 큰 경우 - 그래프가 제대로 표시되지 않음</h2>
+    <svg class="svg1"></svg>
+    <h2>linear scale을 활용</h2>
+    <svg class="svg2"></svg>
+    <h2>polylinear(다중선형) scale을 활용</h2>
+    <svg class="svg3"></svg>
+    <h2>scale의 최대값을 벗어나는 경우</h2>
+    <svg class="svg4"></svg>
+    <h2>clamp를 통한 최대값 설정</h2>
+    =
+    <svg class="svg5"></svg>
+    <body>
+        <script>
+            const data = [14, 68, 24500, 430, 19, 1000, 5555]
+
+            d3.select('svg.svg1')
+                .selectAll('rect')
+                .data(data) // 각 값의 편차가 큰 경우
+                .enter()
+                .append('rect')
+                .attr('width', 10)
+                .attr('height', (d) => d)
+                .style('fill', 'blue')
+                .style('stroke', 'red')
+                .style('stroke-width', '1px')
+                .style('opacity', 0.25)
+                .attr('x', (d, i) => i * 10)
+                .attr('y', (d) => 100 - d)
+
+            const yScale = d3.scaleLinear().domain([0, 24500]).range([0, 100])
+            d3.select('svg.svg2')
+                .selectAll('rect')
+                .data(data) // 각 값의 편차가 큰 경우
+                .enter()
+                .append('rect')
+                .attr('width', 10)
+                .attr('height', (d) => yScale(d))
+                .style('fill', 'blue')
+                .style('stroke', 'red')
+                .style('stroke-width', '1px')
+                .style('opacity', 0.25)
+                .attr('x', (d, i) => i * 10)
+                .attr('y', (d) => 100 - yScale(d))
+
+            const yPolylinearScale = d3
+                .scaleLinear()
+                .domain([0, 100, 1000, 24500])
+                .range([0, 50, 75, 100])
+
+            d3.select('svg.svg3')
+                .selectAll('rect')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('width', 10)
+                .attr('height', (d) => yPolylinearScale(d))
+                .style('fill', 'blue')
+                .style('stroke', 'red')
+                .style('stroke-width', '1px')
+                .style('opacity', 0.25)
+                .attr('x', (d, i) => i * 10)
+                .attr('y', (d) => 100 - yPolylinearScale(d))
+
+            const yEmphasizeScale = d3
+                .scaleLinear()
+                .domain([0, 100, 500])
+                .range([0, 50, 100])
+
+            d3.select('svg.svg4')
+                .selectAll('rect')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('width', 10)
+                .attr('height', (d) => yEmphasizeScale(d))
+                .style('fill', 'blue')
+                .style('stroke', 'red')
+                .style('stroke-width', '1px')
+                .style('opacity', 0.25)
+                .attr('x', (d, i) => i * 10)
+                .attr('y', (d) => 200 - yEmphasizeScale(d))
+
+            d3.select('svg.svg4')
+                .append('line')
+                .attr('x1', 0)
+                .attr('y1', 100)
+                .attr('x2', 200)
+                .attr('y2', 100)
+                .style('stroke', 'black')
+                .style('storke-width', '1px')
+
+            d3.select('svg.svg4')
+                .append('text')
+                .attr('id', 'b')
+                .attr('x', 170)
+                .attr('y', 90)
+                .text('100')
+
+            const yEmphasizeScaleClamp = d3
+                .scaleLinear()
+                .domain([0, 100, 500])
+                .range([0, 50, 100])
+                .clamp(true)
+
+            d3.select('svg.svg5')
+                .selectAll('rect')
+                .data(data)
+                .enter()
+                .append('rect')
+                .attr('width', 10)
+                .attr('height', (d) => yEmphasizeScaleClamp(d))
+                .style('fill', 'blue')
+                .style('stroke', 'red')
+                .style('stroke-width', '1px')
+                .style('opacity', 0.25)
+                .attr('x', (d, i) => i * 10)
+                .attr('y', (d) => 200 - yEmphasizeScaleClamp(d))
+
+            d3.select('svg.svg5')
+                .append('line')
+                .attr('x1', 0)
+                .attr('y1', 100)
+                .attr('x2', 200)
+                .attr('y2', 100)
+                .style('stroke', 'black')
+                .style('storke-width', '1px')
+
+            d3.select('svg.svg5')
+                .append('text')
+                .attr('id', 'b')
+                .attr('x', 170)
+                .attr('y', 90)
+                .text('100')
+        </script>
+    </body>
+</html>

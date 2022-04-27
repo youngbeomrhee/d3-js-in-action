@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>예제: scaleBand transition</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+    <body>
+        <h1>예제: scaleBand with transition</h1>
+        <svg></svg>
+        <script>
+            function dataViz(incomingData) {
+                const width = 400
+                const height = 300
+                const maxScore = d3.max(incomingData, (el) =>
+                    parseInt(el.score)
+                )
+
+                const yScale = d3
+                    .scaleLinear()
+                    .domain([0, maxScore])
+                    .range([0, height])
+
+                // 기존 영역 초기화
+                document.querySelector('svg').innerHTML = ''
+
+                const xScale = d3
+                    .scaleBand()
+                    .domain(incomingData.map((e) => e.label))
+                    .range([0, width])
+                    .paddingInner(0.1)
+
+                d3.select('svg').attr(
+                    'style',
+                    `height: ${height}px; width: ${width}px; border: 1px solid black;`
+                )
+
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(incomingData)
+                    .enter()
+                    .append('rect')
+                    .attr(
+                        'width',
+                        width / incomingData.length -
+                            width / incomingData.length / 10
+                    )
+                    .attr('height', 0)
+                    .attr('x', (d) => xScale(d.label))
+                    .attr('y', height)
+                    .style('fill', 'blue')
+                    .style('stroke', 'red')
+                    .style('stroke-width', '1px')
+                    .style('opacity', 0.25)
+
+                // Animation
+                d3.selectAll('rect')
+                    .data(incomingData)
+                    .transition()
+                    .duration(1000)
+                    .attr('height', (d) => yScale(parseInt(d.score)))
+                    .attr('y', (d) => height - yScale(parseInt(d.score)))
+            }
+
+            const data = [
+                { label: 'n1', score: 10 },
+                { label: 'n2', score: 20 },
+                { label: 'n3', score: 30 },
+                { label: 'n4', score: 40 },
+                { label: 'n5', score: 50 },
+                { label: 'n6', score: 60 },
+                { label: 'n7', score: 70 },
+            ]
+            dataViz(data)
+        </script>
+    </body>
+</html>

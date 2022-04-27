@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DOM</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+    <body>
+        <h1>d3를 사용한 DOM 핸들링</h1>
+        <div
+            id="someDiv"
+            style="width: 200px; height: 100px; border: black 1px solid"
+        >
+            <input id="someCheckbox" type="checkbox" />
+        </div>
+        <script>
+            d3.select('#someDiv').style('border', '5px darkgray dashed')
+            d3.select('#someDiv').attr('id', 'newId')
+            d3.select('#someCheckbox').property('checked', true)
+            d3.select('#newId')
+                .style('background', 'pink')
+                .html('여기에 다른 내용이 들어갑니다')
+        </script>
+    </body>
+</html>

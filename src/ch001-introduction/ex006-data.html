@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>data()</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            #vizcontainer {
+                width: 200px;
+                height: 50px;
+                border: 1px solid gray;
+            }
+            div {
+                border: 1px solid blue;
+            }
+            span {
+                border: 1px solid red;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>data()를 통한 selection과 data 바인딩</h1>
+        <div id="vizcontainer"></div>
+        <script>
+            const someData = [1, 2, 3, 4, 5]
+            d3.select('body')
+                .selectAll('div')
+                .data(someData) // selection에 있는 각 요소를 배열에 있는 각 항목에 바인딩
+                .html((d) => (d > 0 ? d + '번째' : ''))
+                .style('border', '1px solid black')
+                .enter() // 배열 항목 수가 요소의 개수보다 많은 경우 바인딩되지 않은 나머지 요소에 바인딩
+                .append('div')
+                .style('border', '1px solid yellow')
+                .html((d) => `${d}번째`)
+                .append('span')
+                .html((d) => (d % 2 === 0 ? '짝수' : '홀수'))
+                .style('font-weight', 900)
+                .style('color', 'green')
+        </script>
+    </body>
+</html>

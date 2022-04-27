@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SVG Grouping</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            svg {
+                position: absolute;
+                width: 500px;
+                height: 500px;
+                border: 1px lightgray solid;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>
+            g 를 사용한 그룹핑, transform을 통한 이동, scale을 통한 배율조정
+        </h1>
+        <div id="vizcontainer">
+            <svg>
+                <g>
+                    <circle r="2" />
+                    <text>A Label</text>
+                </g>
+                <g transform="translate(100, 50)">
+                    <circle r="2" />
+                    <text>A Label</text>
+                </g>
+                <g transform="translate(100, 400) scale(3.5)">
+                    <circle r="2" />
+                    <text>A Label</text>
+                </g>
+            </svg>
+        </div>
+        <script></script>
+    </body>
+</html>

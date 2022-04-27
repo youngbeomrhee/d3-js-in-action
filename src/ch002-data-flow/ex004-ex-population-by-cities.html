@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>예제: 도시별 인구</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+    <body>
+        <h1>예제: 도시별 인구</h1>
+        <svg></svg>
+        <script>
+            function dataViz(incomingData) {
+                const maxPopulation = d3.max(incomingData, (el) =>
+                    parseInt(el.population)
+                )
+
+                const yScale = d3
+                    .scaleLinear()
+                    .domain([0, maxPopulation])
+                    .range([0, 460])
+
+                d3.select('svg').attr(
+                    'style',
+                    'height: 500px; width: 500px; border: 1px solid black;'
+                )
+
+                const borderRadius = 5
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(incomingData)
+                    .enter()
+                    .append('rect')
+                    .attr('width', 50)
+                    .attr('height', (d) => yScale(parseInt(d.population)))
+                    .attr('x', (d, i) => i * 60)
+                    .attr('rx', borderRadius)
+                    .attr(
+                        'y',
+                        (d) =>
+                            500 + borderRadius - yScale(parseInt(d.population))
+                    )
+                    .style('fill', 'blue')
+                    .style('stroke', 'red')
+                    .style('stroke-width', '1px')
+                    .style('opacity', 0.25)
+            }
+
+            const citiesCsvStr = `"label","population","country","x","y"
+"San Francisco", 750000,"USA",37,-122
+"Fresno", 500000,"USA",36,-119
+"Lahore",12500000,"Pakistan",31,74
+"Karachi",13000000,"Pakistan",24,67
+"Rome",2500000,"Italy",41,12
+"Naples",1000000,"Italy",40,14
+"Rio",12300000,"Brazil",-22,-43
+"Sao Paolo",12300000,"Brazil",-23,-46 
+`
+
+            dataViz(d3.csvParse(citiesCsvStr))
+        </script>
+    </body>
+</html>
