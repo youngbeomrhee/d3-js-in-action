@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>예제: scaleBand</title>
+        <title>예제: scaleBand with dynamic size</title>
         <meta charset="utf-8" />
         <script src="https://d3js.org/d3.v7.min.js"></script>
     </head>
     <body>
-        <h1>예제: scaleBand</h1>
+        <h1>예제: scaleBand with dynamic size</h1>
         <svg></svg>
         <script>
-            function dataViz(incomingData) {
-                const width = 600
-                const height = 400
+            function dataViz(incomingData, i = 0) {
+                const width = 400 + i
+                const height = 300 + i
                 const maxScore = d3.max(incomingData, (el) =>
                     parseInt(el.score)
                 )
@@ -26,12 +26,18 @@
                 //     .domain([0, ...incomingData.map((e) => e.score)])
                 //     .range([0, height])
 
+                // 기존 영역 초기화
+                // svg 내부 전체 삭제
+                // document.querySelector('svg').innerHTML = ''
+                // 막대 그래프만 삭제
+                d3.selectAll('rect').remove()
+
                 const xScale = d3
                     .scaleBand()
                     .domain(incomingData.map((e) => e.label))
                     .range([0, width])
                     .paddingInner(0.1)
-
+                debugger
                 d3.select('svg').attr(
                     'style',
                     `height: ${height}px; width: ${width}px; border: 1px solid black;`
@@ -42,7 +48,11 @@
                     .data(incomingData)
                     .enter()
                     .append('rect')
-                    .attr('width', 50)
+                    .attr(
+                        'width',
+                        width / incomingData.length -
+                            width / incomingData.length / 10
+                    )
                     .attr('height', (d) => yScale(parseInt(d.score)))
                     .attr('x', (d) => xScale(d.label))
                     .attr('y', (d) => height - yScale(parseInt(d.score)))
@@ -62,6 +72,11 @@
                 { label: 'n7', score: 70 },
             ]
             dataViz(data)
+            let i = 0
+            setInterval(() => {
+                dataViz(data, i)
+                i++
+            }, 100)
         </script>
     </body>
 </html>
