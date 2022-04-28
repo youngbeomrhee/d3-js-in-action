@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>D3 실전예제</title>
+        <meta charset="utf-8" />
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+        <style>
+            body {
+                background-color: #f9f9f9;
+            }
+            .container {
+                width: 320px;
+                height: 262px;
+                border: 1px solid #f3f3f3;
+                border-radius: 12px;
+                background-color: white;
+                overflow: auto;
+            }
+            svg {
+                margin-top: 68px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <svg></svg>
+        </div>
+        <script>
+            function dataViz(incomingData) {
+                const width = 415
+                const height = 149
+                const maxScore = d3.max(incomingData, (el) =>
+                    parseInt(el.score)
+                )
+                const correction = 30
+                // const myScore = 100
+                const myScore = 40
+
+                // const paddingOuter = 0.3
+                const yScale = d3
+                    .scaleLinear()
+                    .domain([0, maxScore])
+                    .range([0, height])
+
+                const yLineDomain = [0, 1, 2, 3, 4]
+                // const yLineMax = maxScore <= 50 ? 50 : 100
+                const yLineScale = d3
+                    .scaleLinear()
+                    .domain([0, 5])
+                    .range([0, height])
+
+                yLineDomain.forEach((y) => {
+                    d3.select('svg')
+                        .append('line')
+                        .attr('x1', 0 - correction)
+                        .attr('y1', yLineScale(y))
+                        .attr('x2', width)
+                        .attr('y2', yLineScale(y))
+                        .style('stroke', '#F3F3F3')
+                        .style('storke-width', '1px')
+                })
+
+                const xScale = d3
+                    .scaleBand()
+                    .domain(incomingData.map((e) => e.label))
+                    .range([0, width])
+                    .paddingOuter(0.3)
+
+                // viewport 사이즈 설정
+                d3.select('svg')
+                    .attr('width', width - correction)
+                    .attr('height', height)
+                    .attr('viewBox', [0, 0, width - correction, height])
+
+                const borderRadius = 2
+                d3.select('svg')
+                    .selectAll('rect')
+                    .data(incomingData)
+                    .enter()
+                    .append('rect')
+                    .attr('width', 18)
+                    .attr('height', 0)
+                    .attr('x', (d) => xScale(d.label))
+                    .attr('y', height)
+                    .attr('rx', borderRadius)
+                    .style('fill', (d) =>
+                        d.score === myScore ? '#695FE7' : '#ABA6F1'
+                    )
+
+                d3.select('svg')
+                    .selectAll('rect')
+                    .transition()
+                    .delay((d, i) => i * 200)
+                    .duration(800)
+                    .attr(
+                        'height',
+                        (d) => yScale(parseInt(d.score)) + borderRadius
+                    )
+                    .attr('x', (d) => xScale(d.label))
+                    .attr('y', (d) => height - yScale(parseInt(d.score)))
+            }
+
+            // 100% 최대치 : 50% 최대치와 동일하게 최대치를 정하고 5개의 구간으로만 구분
+            // const data = [
+            //     { label: '0-10', score: 20 },
+            //     { label: '10-20', score: 40 },
+            //     { label: '20-30', score: 60 },
+            //     { label: '30-40', score: 100 },
+            //     { label: '40-50', score: 80 },
+            //     { label: '50-60', score: 30 },
+            //     { label: '60-70', score: 20 },
+            //     { label: '70-73', score: 10 },
+            // ]
+
+            // 50% 최대치
+            const data = [
+                { label: '0-10', score: 10 },
+                { label: '10-20', score: 20 },
+                { label: '20-30', score: 30 },
+                { label: '30-40', score: 50 },
+                { label: '40-50', score: 40 },
+                { label: '50-60', score: 15 },
+                { label: '60-70', score: 10 },
+                { label: '70-73', score: 5 },
+            ]
+            dataViz(data)
+        </script>
+    </body>
+</html>
